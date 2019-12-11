@@ -95,6 +95,8 @@ class TargetStates(IntEnum):
     RUNNING = 0x8
     SYNCING = 0x10
     EXITED = 0x20
+    SIGSEGV = 0x40
+    SIGTRAP = 0x80
     NOT_RUNNING = INITIALIZED | STOPPED
 
 class TargetRegs(object):
@@ -451,7 +453,7 @@ class Target(object):
         #self._no_state_update_pending.set()
 
     @watch('TargetWait')
-    def wait(self, state=TargetStates.STOPPED|TargetStates.EXITED):
+    def wait(self, state=TargetStates.STOPPED|TargetStates.EXITED|TargetStates.SIGSEGV|TargetStates.SIGTRAP):
         while self.state & state == 0:
             pass
 
